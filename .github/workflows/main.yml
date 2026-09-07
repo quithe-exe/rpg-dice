@@ -31,7 +31,7 @@ jobs:
 
       - name: Rename EXE
         run: |
-          move dist\main.exe RPGDiceRoller.exe
+          move dist\rpg-dice.exe RPGDiceRoller.exe
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
