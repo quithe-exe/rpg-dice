@@ -1,0 +1,46 @@
+name: Build & Release EXE
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install customtkinter pyinstaller
+
+      - name: Build EXE
+        run: |
+          pyinstaller --onefile --windowed --noconsole --icon=icon.ico rpg-dice.py
+
+      - name: Rename EXE
+        run: |
+          move dist\main.exe RPGDiceRoller.exe
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "RPG Dice Roller ${{ github.ref_name }}"
+          body: |
+            🎲 Release ${{ github.ref_name }}
+            
+            Download app **RPGDiceRoller.exe** below.
+          files: RPGDiceRoller.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
