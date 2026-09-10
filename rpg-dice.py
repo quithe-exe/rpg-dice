@@ -399,10 +399,15 @@ class RPGDiceRoller(ctk.CTk):
         if self.is_rolling:
             return
 
+        # Pobieranie wartości z pól z obsługą pustych wartości (domyślne liczby)
+        raw_count = self.spin_count.get().strip()
+        raw_min = self.spin_min_val.get().strip()
+        raw_mod = self.spin_modifier.get().strip()
+
         try:
-            count = int(self.spin_count.get())
-            modifier = int(self.spin_modifier.get())
-            min_val = int(self.spin_min_val.get())
+            count = int(raw_count) if raw_count != "" else 1
+            min_val = int(raw_min) if raw_min != "" else 1
+            modifier = int(raw_mod) if raw_mod != "" else 0
         except ValueError:
             self.lbl_details.configure(
                 text="Error: Please enter valid integers!"
@@ -418,9 +423,9 @@ class RPGDiceRoller(ctk.CTk):
             )
             return
 
-        if min_val > sides:
+        if min_val > sides or min_val < 1:
             self.lbl_details.configure(
-                text=f"Error: Min value cannot exceed {sides}!"
+                text=f"Error: Min value must be between 1 and {sides}!"
             )
             return
 
@@ -456,8 +461,7 @@ class RPGDiceRoller(ctk.CTk):
         self.current_dice_str = dice_str
         self.current_count = count
 
-        # --- POPRAWKA WYŚRODKOWANIA KOSTEK ---
-        # Tworzymy wewnętrzną przezroczystą ramkę pomocniczą i wyśrodkowujemy ją za pomocą pack()
+        # Wyśrodkowana ramka pomocnicza dla kostek
         center_container = ctk.CTkFrame(self.dice_display_frame, fg_color="transparent")
         center_container.pack(expand=True)
 
