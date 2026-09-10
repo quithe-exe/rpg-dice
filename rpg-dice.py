@@ -5,7 +5,7 @@ import customtkinter as ctk
 
 # CustomTkinter Appearance Settings
 ctk.set_appearance_mode("Dark")
-ctk.set_default_color_theme("blue")
+ctk.set_default_color_theme("theme/theme.json")
 
 # Clean & Smooth Font Family
 SMOOTH_FONT = ("Segoe UI", "Trebuchet MS", "Helvetica", "sans-serif")
